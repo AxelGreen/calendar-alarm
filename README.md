@@ -45,7 +45,43 @@ Add the following scripts to the package.json file:
   }
 ```
 
-### 3. Google API Setup
+### 3. Add GitHub Actions for automatic deployment
+
+Create the `.github/workflows/deploy.yml` file with the following content:
+
+```yaml
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build
+        run: npm run build
+
+      - name: Deploy to GitHub Pages
+        run: npm run deploy
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+```
+
+### 4. Google API Setup
 
 Create a new project in the Google Cloud Console.
 
